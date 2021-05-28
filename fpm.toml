@@ -9,6 +9,7 @@ auto-executables = true
 auto-tests = true
 auto-examples = true
 
-link = "X11"
+link = "X11" 
+
 [install]
 library = false
