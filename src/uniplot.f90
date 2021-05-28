@@ -1,25 +1,22 @@
 module uniplot
+    use device
     implicit none
     private
     public :: fig_t
-    type :: fig_t
+    type, extends(device_t) :: fig_t
         private
-        integer :: nx, ny
         integer, allocatable :: array(:, :)
     contains
-        procedure :: init     
+        procedure :: init  
         procedure :: point 
         procedure :: show  
         procedure :: line0
         procedure :: line
     end type fig_t
 contains
-    subroutine init(fig, nx, ny)
-        class(fig_t), intent(out) :: fig 
-        integer, intent(in) :: nx, ny
-        fig%nx = nx
-        fig%ny = ny 
-        allocate(fig%array(0:(nx+1)/2, 0:(ny+3)/4) )
+    subroutine init(fig)
+        class(fig_t), intent(in out) :: fig
+        allocate(fig%array(0:(fig%nx+1)/2, 0:(fig%ny+3)/4) )
     end subroutine init  
   
     subroutine point(fig, ix, iy)

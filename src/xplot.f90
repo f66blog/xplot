@@ -1,6 +1,7 @@
 module xplot
+    use device
     implicit none
-    !private
+    private
     public :: fig_t
 
     interface
@@ -19,9 +20,8 @@ module xplot
         end subroutine Xflush
     end interface
 
-    type :: fig_t
+    type, extends(device_t) :: fig_t
         private
-        integer :: nx, ny
     contains
         procedure :: init     
         procedure :: point 
@@ -33,12 +33,9 @@ module xplot
 
 contains
 
-    subroutine init(fig, nx, ny)
+    subroutine init(fig)
         class(fig_t), intent(in out) :: fig 
-        integer, intent(in) :: nx, ny
-        fig%nx = nx
-        fig%ny = ny
-        call Xopen(nx, ny)  
+        call Xopen(fig%nx, fig%ny)  
      !   call sleep(1)  ! non-standard
     end subroutine init  
 
