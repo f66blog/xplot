@@ -1,15 +1,13 @@
 name = "xplot"
 version = "0.1.0"
-license = "license"
-author = "Jane Doe"
-maintainer = "jane.doe@example.com"
-copyright = "Copyright 2021, Jane Doe"
+license = "MIT License"
+author = "f66blog"
+maintainer = "fortran667790@gmail.com"
+copyright = "Copyright 2021, f66blog"
 [build]
 auto-executables = true
 auto-tests = true
 auto-examples = true
-
 link = "X11" 
-
 [install]
 library = false
