@@ -37,7 +37,7 @@ contains
     subroutine init(fig)
         class(fig_t), intent(in out) :: fig 
         call Xopen(int(fig%nx, c_int), int(fig%ny, c_int))  
-        call sleep(1)  ! non-standard : sleeps 1 sec
+     !   call sleep(1)  ! non-standard : sleeps 1 sec
     end subroutine init  
 
     subroutine point(fig, ix, iy)
