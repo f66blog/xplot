@@ -27,12 +27,12 @@ program check
     end block logistic_map
 
     Lorenz_attractor: block
-!        use uniplot
-        use xplot
+        use uniplot
+!        use xplot
         class(device_t), allocatable :: fig
         integer, parameter :: kd = kind(1.0d0)
         real (kd) :: x, y, z, dx, dy, dz, a, b, c, d
-        integer :: k, nx = 600, ny = 600
+        integer :: k, nx = 200, ny = 200
         real :: scale
         allocate(fig, source = fig_t(nx, ny))
         print *,  'Lorenz attractor'
@@ -59,7 +59,43 @@ program check
             end if 
         end do
         call fig%show()
-    end block Lorenz_attractor 
+    end block Lorenz_attractor
+
+    Laplaces_equation: block
+        use uniplot
+!        use xplot
+        class(device_t), allocatable :: fig
+        real :: x, y, v(-50:50, -50:50)
+        integer :: i, j
+
+        allocate(fig, source = fig_t(150,170))
+        print *,  'Laplace''s equation'
+        call fig%init()
+        call laplace(v)
+! x-direction  
+        do i = lbound(v, 2), ubound(v, 2), 10
+            x = lbound(v, 2) + 0.2 * i
+            y = 30.0 - 0.4 * i 
+            call fig%line(x, y, 0)
+            do j = lbound(v, 1), ubound(v, 1), 10
+                x = j + 0.2 * i 
+                y = 30.0 - 0.4 * i - 2.0 * v(j, i) 
+                call fig%line(x, y, 1)
+            end do
+        end do
+! y-direction
+        do j = lbound(v, 1), ubound(v, 1), 10
+            x = j + 0.2 * lbound(v, 2) 
+            y = 30.0 - 0.4 * lbound(v, 2)
+            call fig%line(x, y, 0)
+            do i = lbound(v, 2), ubound(v, 2), 10
+                x = j + 0.2 * i 
+                y = 30.0 - 0.4 * i - 2.0 * v(j, i) 
+                call fig%line(x, y, 1)
+            end do
+        end do
+        call fig%show()
+    end block Laplaces_equation 
     
     Abe_san: block 
         !use uniplot
@@ -257,4 +293,24 @@ program check
         call fig1%line( 5.0, 21.0, 1)
         call fig1%show()
     end block Abe_san
+
+contains
+
+    subroutine laplace(v) 
+        real, intent(out) :: v(-50:50, -50:50)
+        logical :: mask(lbound(v, 1):ubound(v, 1), lbound(v, 2):ubound(v, 2))
+        integer :: i, j, iter
+        mask = .true.
+        mask(-10, -25:25) = .false. ! static voltage
+        mask( 10, -25:25) = .false. 
+        v = 0.0
+        v(-10, -25:25) =  10.0 
+        v( 10, -25:25) = -10.0
+      !
+        do iter = 1, 200 
+            forall (i = lbound(v, 1) + 1:ubound(v, 1) - 1, j = lbound(v, 2) + 1:ubound(v, 2) - 1, mask(i, j)) 
+                v(i, j) = 0.25 * ( v(i - 1, j) + v(i + 1, j) + v(i, j - 1) + v(i, j + 1) )
+            end forall
+        end do   
+    end subroutine laplace    
 end program check

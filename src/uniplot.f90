@@ -14,7 +14,7 @@ module uniplot
 contains
     subroutine init(fig)
         class(fig_t), intent(in out) :: fig
-        allocate(fig%array(0:(fig%nx+1)/2, 0:(fig%ny+3)/4) )
+        allocate(fig%array(0:(fig%nx+1)/2, 0:(fig%ny+3)/4), source = 0)
     end subroutine init  
   
     subroutine point(fig, ix, iy)
