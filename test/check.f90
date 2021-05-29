@@ -5,6 +5,7 @@ program check
     logistic_map: block
         use uniplot
 !        use xplot
+!        use psplot
         class(device_t), allocatable :: fig
         integer :: ix, i, nx = 150, ny = 80
         real :: p, x, y
@@ -29,6 +30,7 @@ program check
     Lorenz_attractor: block
         use uniplot
 !        use xplot
+!        use psplot
         class(device_t), allocatable :: fig
         integer, parameter :: kd = kind(1.0d0)
         real (kd) :: x, y, z, dx, dy, dz, a, b, c, d
@@ -62,13 +64,20 @@ program check
     end block Lorenz_attractor
 
     Laplaces_equation: block
-        use uniplot
+!        use uniplot
 !        use xplot
+        use psplot
         class(device_t), allocatable :: fig
         real :: x, y, v(-50:50, -50:50)
         integer :: i, j
 
         allocate(fig, source = fig_t(150,170))
+        !
+        select type (fig)
+        type is (fig_t)
+            call fig%filename('Laplace')      
+        end select
+        !
         print *,  'Laplace''s equation'
         call fig%init()
         call laplace(v)
