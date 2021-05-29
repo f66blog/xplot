@@ -5,7 +5,7 @@ static Window   w;
 static GC       gc;
 unsigned long white, black;
 
-void X_open(int nx, int ny){
+void X_open(int nx, int ny) {
     // Open a display
     d = XOpenDisplay(0);
     if ( !d ) return;
@@ -19,7 +19,7 @@ void X_open(int nx, int ny){
     XFlush(d);
 }
 
-void X_point(int ix, int iy){
+void X_point(int ix, int iy) {
      XDrawPoint(d, w, gc, ix, iy);
      XFlush(d);
 }
@@ -28,7 +28,7 @@ void X_flush(){
      XFlush(d);
 }
 
-void X_close(void){
+void X_close(void) {
     XFreeGC(d, gc);
     XDestroyWindow(d, w);
     XFlush(d);
