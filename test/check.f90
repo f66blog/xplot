@@ -1,8 +1,67 @@
 program check
     use device
     implicit none
+
+    logistic_map: block
+        use uniplot
+!        use xplot
+        class(device_t), allocatable :: fig
+        integer :: ix, i, nx = 150, ny = 80
+        real :: p, x, y
+        allocate(fig, source = fig_t(nx, ny))
+        print *,  'logistic map'
+        call fig%init()
+        do ix = 1, nx
+            p = 0.3
+            x = ix * (3.0 - 1.5) / nx + 1.5 
+            do i = 1, 50
+                p = p + x * p * (1.0 - p)
+            end do
+            do i = 51, 100
+                y = p / 1.5 * ny
+                call fig%point(ix, nint(1.0*(ny - y)))
+                p = p + x * p * (1 - p)
+            end do
+        end do
+        call fig%show()
+    end block logistic_map
+
+    Lorenz_attractor: block
+!        use uniplot
+        use xplot
+        class(device_t), allocatable :: fig
+        integer, parameter :: kd = kind(1.0d0)
+        real (kd) :: x, y, z, dx, dy, dz, a, b, c, d
+        integer :: k, nx = 600, ny = 600
+        real :: scale
+        allocate(fig, source = fig_t(nx, ny))
+        print *,  'Lorenz attractor'
+        scale = 2.0
+        call fig%init()
+        a = 10.0_kd
+        b = 28.0_kd
+        c = 8.0_kd / 3.0_kd
+        d = 0.01_kd
+        x = 1.0_kd
+        y = 1.0_kd
+        z = 1.0_kd
+        do k = 1, 3000
+            dx = a * (y - x)
+            dy = x * (b - z) - y
+            dz = x * y - c * z
+            x = x + d * dx
+            y = y + d * dy
+            z = z + d * dz
+            if (k < 100) then 
+                call fig%line( scale * real(x), scale * real(z), 0)
+            else
+                call fig%line( scale * real(x), scale * real(z), 1)
+            end if 
+        end do
+        call fig%show()
+    end block Lorenz_attractor 
     
-    block 
+    Abe_san: block 
         !use uniplot
         !class(device_t), allocatable :: fig1
         !allocate(fig1, source = fig_t(150, 150))
@@ -197,5 +256,5 @@ program check
         call fig1%line(-5.0, 21.0, 0)
         call fig1%line( 5.0, 21.0, 1)
         call fig1%show()
-    end block
+    end block Abe_san
 end program check
