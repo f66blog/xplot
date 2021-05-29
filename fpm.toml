@@ -11,3 +11,5 @@ auto-examples = true
 link = "X11" 
 [install]
 library = false
+[test]
+link = "X11" 
