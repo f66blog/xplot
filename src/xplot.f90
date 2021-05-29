@@ -1,4 +1,5 @@
 module xplot
+    use, intrinsic :: iso_c_binding
     use device
     implicit none
     private
@@ -6,11 +7,13 @@ module xplot
 
     interface
         subroutine Xopen(nx, ny) bind(c, name = 'X_open')
-            integer, value :: nx, ny
+            use, intrinsic :: iso_c_binding , only : c_int
+            integer(c_int), value :: nx, ny
         end subroutine Xopen
 
         subroutine Xpoint(ix, iy) bind(c, name = 'X_point')
-            integer, value :: ix, iy
+            use, intrinsic :: iso_c_binding, only : c_int
+            integer(c_int), value :: ix, iy
         end subroutine Xpoint
 
         subroutine Xclose() bind(c, name = 'X_close')
@@ -35,14 +38,14 @@ contains
 
     subroutine init(fig)
         class(fig_t), intent(in out) :: fig 
-        call Xopen(fig%nx, fig%ny)  
-     !   call sleep(1)  ! non-standard
+        call Xopen(int(fig%nx, c_int), int(fig%ny, c_int))  
+       !   call sleep(1)  ! non-standard
     end subroutine init  
 
     subroutine point(fig, ix, iy)
         class(fig_t), intent(in out) :: fig 
         integer, intent(in) :: ix, iy
-        call Xpoint(ix, iy)
+        call Xpoint(int(ix, c_int), int(iy, c_int))
     end subroutine point
 
     subroutine show(fig)
@@ -58,16 +61,16 @@ contains
         nx = ix1 - ix0
         ny = iy1 - iy0       
         if (nx == 0 .and. ny == 0) then
-            call Xpoint(ix0, iy0)
+            call fig%point(ix0, iy0)
         else if (abs(nx) < abs(ny)) then
             d = nx / real(ny)
             do i = 0, ny, sign(1, ny) 
-                call Xpoint(nint(ix0 + i * d), iy0 + i)
+                call fig%point(nint(ix0 + i * d), iy0 + i)
             end do    
         else
             d = ny / real(nx)
             do i = 0, nx, sign(1, nx)
-                call Xpoint(ix0 + i, nint(iy0 + i * d))
+                call fig%point(ix0 + i, nint(iy0 + i * d))
             end do    
         end if
     end subroutine line0
