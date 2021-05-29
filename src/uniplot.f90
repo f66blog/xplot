@@ -72,7 +72,7 @@ contains
   
     pure elemental integer function shift_code(k)
         integer, intent(in) :: k
-        integer, parameter :: n0 = Z'E2A080' !14852224
+        integer, parameter :: n0 = 14852224 ! Z'E2A080' 
         shift_code = n0 + 256 * (k /64) + mod(k, 64)  !E2A180, E2A280, E2A380      
     end function shift_code    
     
