@@ -9,9 +9,9 @@ program check
         class(device_t), allocatable :: fig
         integer :: ix, i, nx = 150, ny = 80
         real :: p, x, y
-        allocate(fig, source = fig_t(nx, ny))
+        allocate(fig_t::fig)
         print *,  'logistic map'
-        call fig%init()
+        call fig%init(nx, ny, 'Loggistic_map')
         do ix = 1, nx
             p = 0.3
             x = ix * (3.0 - 1.5) / nx + 1.5 
@@ -36,10 +36,10 @@ program check
         real (kd) :: x, y, z, dx, dy, dz, a, b, c, d
         integer :: k, nx = 200, ny = 200
         real :: scale
-        allocate(fig, source = fig_t(nx, ny))
+        allocate(fig_t::fig)
         print *,  'Lorenz attractor'
         scale = 2.0
-        call fig%init()
+        call fig%init(nx, ny, 'Lorenz_attractor')
         a = 10.0_kd
         b = 28.0_kd
         c = 8.0_kd / 3.0_kd
@@ -66,22 +66,14 @@ program check
     Laplaces_equation: block
 !        use uniplot
 !        use xplot
-        use psplot, file_t => fig_t 
-!        use htmlplot, file_t => fig_t 
+        use psplot 
+!        use htmlplot 
         class(device_t), allocatable :: fig
         real :: x, y, v(-50:50, -50:50)
         integer :: i, j
-! console Xwin 
-!        allocate(fig, source = fig_t(150,170))
-! ps html
-        allocate(fig, source = file_t(150,170))
-        select type (fig)
-        type is (file_t) 
-            call fig%filename('Laplace')      
-        end select
-        !
+        allocate(fig_t::fig)               !
         print *,  'Laplace''s equation'
-        call fig%init()
+        call fig%init(150, 170, 'Laplaces_equation')
         call laplace(v)
 ! x-direction  
         do i = lbound(v, 2), ubound(v, 2), 10
@@ -110,12 +102,11 @@ program check
     
     Abe_san: block 
 !        use uniplot
-        use htmlplot
-         !use xplot
+        !use htmlplot
+        use xplot
         class(device_t), allocatable :: fig1
-        allocate(fig1, source = fig_t(450, 450))
-            
-        call fig1%init()
+        allocate(fig_t::fig1)    
+        call fig1%init(450, 450, 'Abe_san')
         ! chin chin
         call fig1%line(  0.0,  11.0, 0)
         call fig1%line(  0.0,   8.0, 1)    

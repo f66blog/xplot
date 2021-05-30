@@ -5,24 +5,25 @@ module htmlplot
     public :: fig_t
     type, extends(device_t) :: fig_t
         private
-        character(len = :), allocatable, public :: fn
-        integer, allocatable :: iw 
+        integer :: iw 
     contains 
         procedure :: init  
         procedure :: point 
         procedure :: show
-        procedure :: filename
         final :: off  
     end type fig_t
 contains
 
-    subroutine init(fig)
+    subroutine init(fig, nx, ny, title)
         class(fig_t), intent(in out) :: fig
-        allocate(fig%iw)
+        integer, intent(in) :: nx, ny
+        character(len = *), intent(in) :: title
+        fig%nx = nx
+        fig%ny = ny
+        fig%title = title
         fig%line0 => line0
         fig%line  => line
-        if (.not. allocated(fig%fn)) fig%fn = 'figure'
-        associate (iw => fig%iw, title => fig%fn)
+        associate (iw => fig%iw, title => fig%title)
             open(newunit = iw, file = trim(title) // '.html')
             write(iw, '(a)') '<!DOCTYPE html>'
             write(iw, '(a)') '<html>'
@@ -43,15 +44,9 @@ contains
         end associate
     end subroutine init
 
-    subroutine filename(fig, fn)
-        class(fig_t), intent(in out) :: fig
-        character(*), intent(in) :: fn
-        fig%fn = fn
-    end subroutine filename
-
     subroutine off(fig)
         type(fig_t), intent(in) :: fig
-        associate (iw => fig%iw, title => fig%fn, nx => fig%nx, ny => fig%ny)
+        associate (iw => fig%iw, title => fig%title, nx => fig%nx, ny => fig%ny)
             write(iw, '(a)') 'context.stroke();'
             write(iw, '(a)') '}'
             write(iw, '(a)') '//-->'

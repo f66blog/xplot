@@ -5,28 +5,29 @@ module psplot
     public :: fig_t
     type, extends(device_t) :: fig_t
         private
-        character(len = :), allocatable, public :: fn
-        integer, allocatable :: iw 
+        integer :: iw 
     contains 
         procedure :: init  
         procedure :: point 
         procedure :: show
-        procedure :: filename
         final :: off  
     end type fig_t
 contains
 
-    subroutine init(fig)
+    subroutine init(fig, nx, ny, title)
         class(fig_t), intent(in out) :: fig
-        allocate(fig%iw)
+        integer, intent(in) :: nx, ny
+        character(len = *), intent(in) :: title
+        fig%nx = nx
+        fig%ny = ny
+        fig%title = title
         fig%line0 => line0
         fig%line  => line
-        if (.not. allocated(fig%fn)) fig%fn = 'figure'
-        associate (iw => fig%iw, fn => fig%fn)
-            open(newunit = iw, file = trim(fn) // '.ps')
+        associate (iw => fig%iw, title => fig%title)
+            open(newunit = iw, file = trim(fig%title) // '.ps')
             write(iw, '(a)') '%!PS-Adobe-3.0 EPSF-3.0'
             write(iw, '(a, 2i8)') '%%BoundingBox: 0 0 ', fig%nx, fig%ny
-            write(iw, '(2a)') '%%Title: ', trim(fn)
+            write(iw, '(2a)') '%%Title: ', trim(title)
             write(iw, '(a)') '%%EndComments'
             write(iw, '(a)') 'gsave'
             write(iw, '(a)') '1 1 scale'    !'0.8 0.8 scale'
@@ -36,13 +37,8 @@ contains
             write(iw, '(a, i8, a)') '0 ', fig%ny, ' translate'
             write(iw, '(a)') 'newpath'
         end associate
+        
     end subroutine init
-
-    subroutine filename(fig, fn)
-        class(fig_t), intent(in out) :: fig
-        character(*), intent(in) :: fn
-        fig%fn = fn
-    end subroutine filename
 
     subroutine off(fig)
         type(fig_t), intent(in) :: fig
@@ -74,7 +70,7 @@ contains
             write(fig%iw, '(2i7, a)') ix0, -iy0, ' moveto'
             write(fig%iw, '(2i7, a)') ix1, -iy1, ' lineto'
         end select
-      end subroutine line0
+    end subroutine line0
 
     subroutine line(fig, x, y, ipen)
         class(device_t), intent(in out) :: fig

@@ -1,7 +1,7 @@
 program main
     use device
     implicit none  
-    class (device_t), allocatable :: fig
+    class(device_t), allocatable :: fig
     real, allocatable :: x(:), y(:)
     integer :: n = 10**3
     allocate(x(n), y(n))
@@ -11,20 +11,16 @@ program main
 
 uplot: block
         use  uniplot
-!        allocate(fig, source = fig_t(100, 100))
         allocate(fig_t::fig)
-        fig%nx = 100
-        fig%ny = 100
+        call fig%init(100, 100, 'MonteCarlo')
         call monte_carlo(fig, x, y) 
         deallocate(fig)
     end block uplot
 
 xplot: block
         use xplot
-!        allocate(fig, source = fig_t(450, 450))
         allocate(fig_t::fig)
-        fig%nx = 450
-        fig%ny = 450
+        call fig%init(450, 450, 'MonteCarlo')
         call monte_carlo(fig, x, y) 
         deallocate(fig)
     end block xplot
@@ -37,8 +33,7 @@ contains
         k = fig%nx
         print *
         print *, 'Monte Carlo: estimated pi =', 4.0 * count(x**2 + y**2 < 1.0) / size(x) 
-        call fig%init()
-        ! draw box
+        !draw box
         call fig%line0(0, 0, k-1, 0)
         call fig%line0(0, 0, 0, k-1)
         call fig%line0(0, k-1, k-1, k-1)

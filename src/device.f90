@@ -2,6 +2,7 @@ module device
     implicit none
     type, abstract :: device_t
         integer :: nx, ny
+        character(len = :), allocatable :: title 
         procedure (device_line0), pointer, pass :: line0 => device_line0
         procedure (device_line ), pointer, pass :: line  => device_line
     contains
@@ -11,8 +12,10 @@ module device
     end type device_t
     
     abstract interface
-        subroutine device_init(fig)
+        subroutine device_init(fig, nx, ny, title)
             import :: device_t
+            integer, intent(in) :: nx, ny
+            character(len = *), intent(in) :: title
             class(device_t), intent(in out) :: fig 
         end subroutine device_init  
         

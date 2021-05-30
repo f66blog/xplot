@@ -12,9 +12,14 @@ module uniplot
         procedure :: show  
     end type fig_t
 contains
-    subroutine init(fig)
+    subroutine init(fig, nx, ny, title)
         class(fig_t), intent(in out) :: fig
-        allocate(fig%array(0:(fig%nx+1)/2, 0:(fig%ny+3)/4), source = 0)
+        integer, intent(in) :: nx, ny
+        character(len = *), intent(in) :: title
+        fig%nx = nx
+        fig%ny = ny
+        fig%title = title
+        allocate(fig%array(0:(nx+1)/2, 0:(ny+3)/4), source = 0)
     end subroutine init  
   
     subroutine point(fig, ix, iy)
