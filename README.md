@@ -25,3 +25,6 @@ call sleep(1) in xplot.f90 may be needed
 postscript
 ![capture](https://cdn-ak.f.st-hatena.com/images/fotolife/f/fortran66/20210530/20210530023052.png)
 
+HTML canvas
+![capture](https://cdn-ak.f.st-hatena.com/images/fotolife/f/fortran66/20210530/20210530130610.png)
+

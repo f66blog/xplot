@@ -88,7 +88,7 @@ contains
         end select
       end subroutine line0
 
-    subroutine line(fig, x, y, ipen)
+      subroutine line(fig, x, y, ipen)
         class(device_t), intent(in out) :: fig
         real, intent(in) :: x, y
         integer, intent(in) :: ipen
