@@ -2,3 +2,6 @@ build/*
 src/*.mod
 *.ps
 *.html
+*.mod
+a.out
+*.o
