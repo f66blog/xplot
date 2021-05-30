@@ -71,9 +71,8 @@ contains
         integer, intent(in) :: ix0, iy0, ix1, iy1
         select type (fig)
         type is (fig_t)
-        
-        write(fig%iw, '(2i7, a)') ix0, -iy0, ' moveto'
-        write(fig%iw, '(2i7, a)') ix1, -iy1, ' lineto'
+            write(fig%iw, '(2i7, a)') ix0, -iy0, ' moveto'
+            write(fig%iw, '(2i7, a)') ix1, -iy1, ' lineto'
         end select
       end subroutine line0
 
@@ -84,15 +83,15 @@ contains
         real :: xn, yn, fx, fy
         select type (fig)
         type is (fig_t)
-        xn = fig%nx / 2.0
-        yn = fig%ny / 2.0 * 1.5
-        fx = fig%nx / 150.0
-        fy = fig%ny / 150.0
-        if (ipen == 1) then 
-            write(fig%iw, '(2f10.3, a)') fx * x + xn, fy * y - yn, ' lineto'
-        else 
-            write(fig%iw, '(2f10.3, a)') fx * x + xn, fy * y - yn, ' moveto'
-        end if 
+            xn = fig%nx / 2.0
+            yn = fig%ny / 2.0 * 1.5
+            fx = fig%nx / 150.0
+            fy = fig%ny / 150.0
+            if (ipen == 1) then 
+                write(fig%iw, '(2f10.3, a)') fx * x + xn, fy * y - yn, ' lineto'
+            else 
+                write(fig%iw, '(2f10.3, a)') fx * x + xn, fy * y - yn, ' moveto'
+            end if 
         end select  
     end subroutine line
 
