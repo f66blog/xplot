@@ -3,5 +3,6 @@ src/*.mod
 *.ps
 *.html
 *.mod
-a.out*
+a.out
+a.out.dSYM
 *.o
