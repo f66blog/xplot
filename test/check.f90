@@ -66,15 +66,17 @@ program check
     Laplaces_equation: block
 !        use uniplot
 !        use xplot
-        use psplot
+        use psplot, file_t => fig_t 
+!        use htmlplot, file_t => fig_t 
         class(device_t), allocatable :: fig
         real :: x, y, v(-50:50, -50:50)
         integer :: i, j
-
-        allocate(fig, source = fig_t(150,170))
-        !
+! console Xwin 
+!        allocate(fig, source = fig_t(150,170))
+! ps html
+        allocate(fig, source = file_t(150,170))
         select type (fig)
-        type is (fig_t)
+        type is (file_t) 
             call fig%filename('Laplace')      
         end select
         !
@@ -107,11 +109,9 @@ program check
     end block Laplaces_equation 
     
     Abe_san: block 
-        !use uniplot
-        !class(device_t), allocatable :: fig1
-        !allocate(fig1, source = fig_t(150, 150))
-
-        use xplot
+!        use uniplot
+        use htmlplot
+         !use xplot
         class(device_t), allocatable :: fig1
         allocate(fig1, source = fig_t(450, 450))
             
