@@ -3,5 +3,5 @@ src/*.mod
 *.ps
 *.html
 *.mod
-a.out
+a.out*
 *.o
